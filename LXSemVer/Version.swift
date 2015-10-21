@@ -163,3 +163,55 @@ extension Version : CustomStringConvertible {
         return description
     }
 }
+
+extension DotSeparatedValues {
+    public func next() -> [DotSeparatedValues] {
+        var result = [DotSeparatedValues]()
+        for (index, value) in self.values.enumerate() {
+            if let num = Int(value) {
+                var valueSlice = self.values[0...index]
+                valueSlice[index] = String(num + 1)
+                result.append(DotSeparatedValues(values: Array(valueSlice)))
+                continue
+            }
+            
+            let nextIndex = index + 1
+            if nextIndex < self.values.count && Int(self.values[nextIndex]) != nil {
+                continue
+            }
+            
+            var newValues = Array(self.values[0...index])
+            newValues.append("1")
+            result.append(DotSeparatedValues(values: newValues))
+        }
+        return result
+    }
+}
+
+extension Version {
+    public func next() -> [Version] {
+        if let prerelease = self.prerelease {
+            var versions = prerelease.next().map { Version(major: self.major, minor: self.minor, patch: self.patch, prerelease: $0) }
+            if let firstPrereleaseIdentifier = prerelease.values.first?.lowercaseString {
+                switch firstPrereleaseIdentifier {
+                case "alpha":
+                    versions.append(Version(major: self.major, minor: self.minor, patch: self.patch, prerelease: "beta.1"))
+                case "beta":
+                    versions.append(Version(major: self.major, minor: self.minor, patch: self.patch, prerelease: "rc.1"))
+                case "rc":
+                    versions.append(Version(major: self.major, minor: self.minor, patch: self.patch))
+                    break
+                default:
+                    break
+                }
+            }
+            return versions
+        } else {
+            return [
+                Version(major: self.major + 1, minor: 0, patch: 0, prerelease: "alpha.1"),
+                Version(major: self.major, minor: self.minor + 1, patch: 0, prerelease: "alpha.1"),
+                Version(major: self.major, minor: self.minor, patch: self.patch + 1, prerelease: "alpha.1")
+            ]
+        }
+    }
+}

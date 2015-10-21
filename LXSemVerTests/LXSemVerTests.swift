@@ -86,6 +86,38 @@ class LXSemVerTests: XCTestCase {
         XCTAssertFalse(DotSeparatedValues(string: "alpha.1") > DotSeparatedValues(string: "alpha.beta"))
     }
     
+    func testDotSeparatedValuesNext() {
+        XCTAssertEqual(
+            DotSeparatedValues(string: "alpha").next(),
+            [
+                DotSeparatedValues(string: "alpha.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(string: "alpha.1").next(),
+            [
+                DotSeparatedValues(string: "alpha.2")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(string: "alpha.beta").next(),
+            [
+                DotSeparatedValues(string: "alpha.1"),
+                DotSeparatedValues(string: "alpha.beta.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(string: "alpha.beta.1").next(),
+            [
+                DotSeparatedValues(string: "alpha.1"),
+                DotSeparatedValues(string: "alpha.beta.2")
+            ]
+        )
+    }
+    
     func testVersionComparison() {
         XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "2.0.0")!)
         XCTAssertLessThan(Version(string: "2.0.0")!, Version(string: "2.1.0")!)
@@ -100,5 +132,48 @@ class LXSemVerTests: XCTestCase {
         XCTAssertLessThan(Version(string: "1.0.0-rc.1")!, Version(string: "1.0.0")!)
         XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "1.0.1-alpha")!)
         XCTAssertLessThan(Version(string: "1.0.1-alpha")!, Version(string: "1.0.1-alpha.1")!)
+    }
+    
+    func testVersionNext() {
+        XCTAssertEqual(
+            Version(major: 1, minor: 0, patch: 0).next(),
+            [
+                Version(major: 2, minor: 0, patch: 0, prerelease: "alpha.1"),
+                Version(major: 1, minor: 1, patch: 0, prerelease: "alpha.1"),
+                Version(major: 1, minor: 0, patch: 1, prerelease: "alpha.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            Version(major: 1, minor: 0, patch: 0, prerelease: "alpha").next(),
+            [
+                Version(major: 1, minor: 0, patch: 0, prerelease: "alpha.1"),
+                Version(major: 1, minor: 0, patch: 0, prerelease: "beta.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            Version(major: 1, minor: 0, patch: 0, prerelease: "alpha.1").next(),
+            [
+                Version(major: 1, minor: 0, patch: 0, prerelease: "alpha.2"),
+                Version(major: 1, minor: 0, patch: 0, prerelease: "beta.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            Version(major: 1, minor: 0, patch: 0, prerelease: "beta.9").next(),
+            [
+                Version(major: 1, minor: 0, patch: 0, prerelease: "beta.10"),
+                Version(major: 1, minor: 0, patch: 0, prerelease: "rc.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            Version(major: 1, minor: 0, patch: 0, prerelease: "rc.3").next(),
+            [
+                Version(major: 1, minor: 0, patch: 0, prerelease: "rc.4"),
+                Version(major: 1, minor: 0, patch: 0)
+            ]
+        )
     }
 }
