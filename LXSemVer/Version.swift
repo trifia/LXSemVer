@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct DotSeparatedValues {
-    let values: [String]
+public struct DotSeparatedValues {
+    public let values: [String]
     
-    init(values: [String]) {
+    public init(values: [String]) {
         self.values = values
     }
     
-    init(string: String) {
+    public init(string: String) {
         let values = string.characters.split(".").map(String.init)
         self.init(values: values)
     }
@@ -24,14 +24,14 @@ struct DotSeparatedValues {
 extension DotSeparatedValues : Equatable {
 }
 
-func ==(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
+public func ==(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
     return lhs.values == rhs.values
 }
 
 extension DotSeparatedValues : Comparable {
 }
 
-func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
+public func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
     for (lvalue, rvalue) in zip(lhs.values, rhs.values) {
         if lvalue == rvalue {
             continue
@@ -50,45 +50,45 @@ func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
 }
 
 extension DotSeparatedValues : ArrayLiteralConvertible {
-    init(arrayLiteral elements: String...) {
+    public init(arrayLiteral elements: String...) {
         self.init(values: elements)
     }
 }
 
 extension DotSeparatedValues : StringLiteralConvertible {
-    init(unicodeScalarLiteral value: String) {
+    public init(unicodeScalarLiteral value: String) {
         self.init(string: value)
     }
     
-    init(extendedGraphemeClusterLiteral value: String) {
+    public init(extendedGraphemeClusterLiteral value: String) {
         self.init(string: value)
     }
     
-    init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(string: value)
     }
 }
 
 extension DotSeparatedValues : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return self.values.joinWithSeparator(".")
     }
 }
 
-struct Version {
+public struct Version {
     // https://github.com/sindresorhus/semver-regex
     static let versionNumberPattern = "(?:0|[1-9][0-9]*)"
     static let prereleasePattern = "(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)"
     static let buildMetadataPattern = "(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)"
     static let semanticVersioningPattern = "\\A(\(versionNumberPattern))\\.(\(versionNumberPattern))\\.(\(versionNumberPattern))(\(prereleasePattern)?)(\(buildMetadataPattern)?)\\z"
     
-    let major: Int
-    let minor: Int
-    let patch: Int
-    let prerelease: DotSeparatedValues?
-    let buildMetadata: DotSeparatedValues?
+    public let major: Int
+    public let minor: Int
+    public let patch: Int
+    public let prerelease: DotSeparatedValues?
+    public let buildMetadata: DotSeparatedValues?
     
-    init(major: Int, minor: Int, patch: Int, prerelease: DotSeparatedValues? = nil, buildMetadata: DotSeparatedValues? = nil) {
+    public init(major: Int, minor: Int, patch: Int, prerelease: DotSeparatedValues? = nil, buildMetadata: DotSeparatedValues? = nil) {
         self.major = major
         self.minor = minor
         self.patch = patch
@@ -96,7 +96,7 @@ struct Version {
         self.buildMetadata = buildMetadata
     }
     
-    init?(string: String) {
+    public init?(string: String) {
         guard
             let regex = try? NSRegularExpression(pattern: "\\A\(Version.semanticVersioningPattern)\\z", options: []),
             let match = regex.firstMatchInString(string, options: [], range: NSRange(location: 0, length: string.characters.count)),
@@ -128,14 +128,14 @@ struct Version {
 extension Version : Equatable {
 }
 
-func ==(lhs: Version, rhs: Version) -> Bool {
+public func ==(lhs: Version, rhs: Version) -> Bool {
     return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch && lhs.prerelease == rhs.prerelease
 }
 
 extension Version : Comparable {
 }
 
-func <(lhs: Version, rhs: Version) -> Bool {
+public func <(lhs: Version, rhs: Version) -> Bool {
     if lhs.major < rhs.major {
         return true
     } else if lhs.minor < rhs.minor {
@@ -152,7 +152,7 @@ func <(lhs: Version, rhs: Version) -> Bool {
 }
 
 extension Version : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         var description = "\(self.major).\(self.minor).\(self.patch)"
         if let prerelease = self.prerelease {
             description += "-\(prerelease)"
