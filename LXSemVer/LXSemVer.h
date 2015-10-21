@@ -6,7 +6,7 @@
 //  Copyright © 2015 lxcid. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for LXSemVer.
 FOUNDATION_EXPORT double LXSemVerVersionNumber;
