@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AB9C2A991BD8247B00729B33"
-               BuildableName = "LXSemVer_OSX.framework"
+               BuildableName = "LXSemVer.framework"
                BlueprintName = "LXSemVer_OSX"
                ReferencedContainer = "container:LXSemVer.xcodeproj">
             </BuildableReference>
@@ -26,7 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -43,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB9C2A991BD8247B00729B33"
-            BuildableName = "LXSemVer_OSX.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_OSX"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>
@@ -65,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB9C2A991BD8247B00729B33"
-            BuildableName = "LXSemVer_OSX.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_OSX"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>
@@ -83,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB9C2A991BD8247B00729B33"
-            BuildableName = "LXSemVer_OSX.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_OSX"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AB0D1FE21BD6E644003971A3"
-               BuildableName = "LXSemVer_iOS.framework"
+               BuildableName = "LXSemVer.framework"
                BlueprintName = "LXSemVer_iOS"
                ReferencedContainer = "container:LXSemVer.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB0D1FE21BD6E644003971A3"
-            BuildableName = "LXSemVer_iOS.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_iOS"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB0D1FE21BD6E644003971A3"
-            BuildableName = "LXSemVer_iOS.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_iOS"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AB0D1FE21BD6E644003971A3"
-            BuildableName = "LXSemVer_iOS.framework"
+            BuildableName = "LXSemVer.framework"
             BlueprintName = "LXSemVer_iOS"
             ReferencedContainer = "container:LXSemVer.xcodeproj">
          </BuildableReference>
