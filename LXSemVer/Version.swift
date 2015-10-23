@@ -42,8 +42,10 @@ public func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
             return true
         } else if lnumOpt == nil && rnumOpt == nil && lvalue < rvalue {
             return true
-        } else if rnumOpt == nil {
+        } else if lnumOpt != nil && rnumOpt == nil {
             return true
+        } else {
+            return false
         }
     }
     return lhs.values.count < rhs.values.count
@@ -208,9 +210,9 @@ extension Version {
             return versions
         } else {
             return [
-                Version(major: self.major + 1, minor: 0, patch: 0, prerelease: "alpha.1"),
+                Version(major: self.major, minor: self.minor, patch: self.patch + 1, prerelease: "alpha.1"),
                 Version(major: self.major, minor: self.minor + 1, patch: 0, prerelease: "alpha.1"),
-                Version(major: self.major, minor: self.minor, patch: self.patch + 1, prerelease: "alpha.1")
+                Version(major: self.major + 1, minor: 0, patch: 0, prerelease: "alpha.1")
             ]
         }
     }

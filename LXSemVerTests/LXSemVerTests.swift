@@ -132,15 +132,17 @@ class LXSemVerTests: XCTestCase {
         XCTAssertLessThan(Version(string: "1.0.0-rc.1")!, Version(string: "1.0.0")!)
         XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "1.0.1-alpha")!)
         XCTAssertLessThan(Version(string: "1.0.1-alpha")!, Version(string: "1.0.1-alpha.1")!)
+        
+        XCTAssertEqual([Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!].sort(<), [Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!])
     }
     
     func testVersionNext() {
         XCTAssertEqual(
             Version(major: 1, minor: 0, patch: 0).next(),
             [
-                Version(major: 2, minor: 0, patch: 0, prerelease: "alpha.1"),
+                Version(major: 1, minor: 0, patch: 1, prerelease: "alpha.1"),
                 Version(major: 1, minor: 1, patch: 0, prerelease: "alpha.1"),
-                Version(major: 1, minor: 0, patch: 1, prerelease: "alpha.1")
+                Version(major: 2, minor: 0, patch: 0, prerelease: "alpha.1")
             ]
         )
         
