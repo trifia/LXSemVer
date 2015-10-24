@@ -134,6 +134,8 @@ class LXSemVerTests: XCTestCase {
         XCTAssertLessThan(Version(string: "1.0.1-alpha")!, Version(string: "1.0.1-alpha.1")!)
         
         XCTAssertEqual([Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!].sort(<), [Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!])
+        XCTAssertEqual([Version(string: "2.0.0")!, Version(string: "1.0.0-beta.1")!].sort(<), [Version(string: "1.0.0-beta.1")!, Version(string: "2.0.0")!])
+        XCTAssertEqual(Version(string: "1.0.0")!.next().sort(<), [Version(string: "1.0.1-alpha.1")!, Version(string: "1.1.0-alpha.1")!, Version(string: "2.0.0-alpha.1")!])
     }
     
     func testVersionNext() {

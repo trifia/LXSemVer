@@ -138,14 +138,15 @@ extension Version : Comparable {
 }
 
 public func <(lhs: Version, rhs: Version) -> Bool {
-    if lhs.major < rhs.major {
-        return true
-    } else if lhs.minor < rhs.minor {
-        return true
-    } else if lhs.patch < rhs.patch {
-        return true
-    } else if let lprv = lhs.prerelease, let rprv = rhs.prerelease where lprv < rprv {
-        return true
+    // FIXME: (me@lxcid.com) Rethink the logic.
+    if lhs.major != rhs.major {
+        return lhs.major < rhs.major
+    } else if lhs.minor != rhs.minor {
+        return lhs.minor < rhs.minor
+    } else if lhs.patch != rhs.patch {
+        return lhs.patch < rhs.patch
+    } else if let lprv = lhs.prerelease, let rprv = rhs.prerelease where lprv != rprv {
+        return lprv < rprv
     } else if lhs.prerelease != nil && rhs.prerelease == nil {
         return true
     } else {
