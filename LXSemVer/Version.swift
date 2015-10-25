@@ -84,13 +84,13 @@ public struct Version {
     static let buildMetadataPattern = "(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)"
     static let semanticVersioningPattern = "\\A(\(versionNumberPattern))\\.(\(versionNumberPattern))\\.(\(versionNumberPattern))(\(prereleasePattern)?)(\(buildMetadataPattern)?)\\z"
     
-    public let major: Int
-    public let minor: Int
-    public let patch: Int
+    public let major: UInt
+    public let minor: UInt
+    public let patch: UInt
     public let prerelease: DotSeparatedValues?
     public let buildMetadata: DotSeparatedValues?
     
-    public init(major: Int, minor: Int, patch: Int, prerelease: DotSeparatedValues? = nil, buildMetadata: DotSeparatedValues? = nil) {
+    public init(major: UInt, minor: UInt, patch: UInt, prerelease: DotSeparatedValues? = nil, buildMetadata: DotSeparatedValues? = nil) {
         self.major = major
         self.minor = minor
         self.patch = patch
@@ -102,9 +102,9 @@ public struct Version {
         guard
             let regex = try? NSRegularExpression(pattern: "\\A\(Version.semanticVersioningPattern)\\z", options: []),
             let match = regex.firstMatchInString(string, options: [], range: NSRange(location: 0, length: string.characters.count)),
-            let major = Int((string as NSString).substringWithRange(match.rangeAtIndex(1))),
-            let minor = Int((string as NSString).substringWithRange(match.rangeAtIndex(2))),
-            let patch = Int((string as NSString).substringWithRange(match.rangeAtIndex(3)))
+            let major = UInt((string as NSString).substringWithRange(match.rangeAtIndex(1))),
+            let minor = UInt((string as NSString).substringWithRange(match.rangeAtIndex(2))),
+            let patch = UInt((string as NSString).substringWithRange(match.rangeAtIndex(3)))
             else {
                 return nil
         }

@@ -142,6 +142,25 @@ class LXSemVerTests: XCTestCase {
         )
     }
     
+    func testSemVer_2_0_0_Spec_2() {
+        // Ensure Swift does not overflow when casting the string "-1" to an unsigned integer value.
+        XCTAssertNil(UInt("-1"))
+        XCTAssertEqual(UInt("0")!, 0)
+        XCTAssertEqual(UInt("1")!, 1)
+        
+        XCTAssertNotNil(Version(string: "1.0.0"))
+        XCTAssertNil(Version(string: "01.0.0"))
+        XCTAssertNotNil(Version(string: "1.5.0"))
+        XCTAssertNil(Version(string: "1.05.0"))
+        XCTAssertNotNil(Version(string: "0.1.7"))
+        XCTAssertNil(Version(string: "0.1.007"))
+        
+        XCTAssertNotNil(Version(string: "1.1.1"))
+        XCTAssertNil(Version(string: "-1.1.1"))
+        XCTAssertNil(Version(string: "1.-1.1"))
+        XCTAssertNil(Version(string: "1.1.-1"))
+    }
+    
     func testSemVer_2_0_0_Spec_11() {
         do {
             XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "2.0.0")!)
