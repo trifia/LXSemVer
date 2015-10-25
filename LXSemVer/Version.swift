@@ -138,7 +138,6 @@ extension Version : Comparable {
 }
 
 public func <(lhs: Version, rhs: Version) -> Bool {
-    // FIXME: (me@lxcid.com) Rethink the logic.
     if lhs.major != rhs.major {
         return lhs.major < rhs.major
     } else if lhs.minor != rhs.minor {
@@ -151,6 +150,20 @@ public func <(lhs: Version, rhs: Version) -> Bool {
         return true
     } else {
         return false
+    }
+}
+
+extension Version : StringLiteralConvertible {
+    public init(unicodeScalarLiteral value: String) {
+        self.init(string: value)!
+    }
+    
+    public init(extendedGraphemeClusterLiteral value: String) {
+        self.init(string: value)!
+    }
+    
+    public init(stringLiteral value: String) {
+        self.init(string: value)!
     }
 }
 
