@@ -9,6 +9,30 @@
 import XCTest
 @testable import LXSemVer
 
+// http://stackoverflow.com/a/24029847
+extension CollectionType {
+    /// Return a copy of `self` with its elements shuffled
+    func shuffle() -> [Generator.Element] {
+        var list = Array(self)
+        list.shuffleInPlace()
+        return list
+    }
+}
+
+extension MutableCollectionType where Index == Int {
+    /// Shuffle the elements of `self` in-place.
+    mutating func shuffleInPlace() {
+        // empty and single-element collections don't shuffle
+        if count < 2 { return }
+        
+        for i in 0..<count - 1 {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            guard i != j else { continue }
+            swap(&self[i], &self[j])
+        }
+    }
+}
+
 private func hasMatch(string: String, regex: NSRegularExpression) -> Bool {
     let numberOfMatches = regex.numberOfMatchesInString(string, options: [], range: NSMakeRange(0, string.characters.count))
     return numberOfMatches > 0
@@ -118,24 +142,44 @@ class LXSemVerTests: XCTestCase {
         )
     }
     
-    func testVersionComparison() {
-        XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "2.0.0")!)
-        XCTAssertLessThan(Version(string: "2.0.0")!, Version(string: "2.1.0")!)
-        XCTAssertLessThan(Version(string: "2.1.0")!, Version(string: "2.1.1")!)
+    func testSemVer_2_0_0_Spec_11() {
+        do {
+            XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "2.0.0")!)
+            XCTAssertLessThan(Version(string: "2.0.0")!, Version(string: "2.1.0")!)
+            XCTAssertLessThan(Version(string: "2.1.0")!, Version(string: "2.1.1")!)
+            
+            let versions: [Version] = [
+                "1.0.0",
+                "2.0.0",
+                "2.1.0",
+                "2.1.1",
+            ]
+            XCTAssertEqual(versions.shuffle().sort(<), versions)
+        }
         
-        XCTAssertLessThan(Version(string: "1.0.0-alpha")!, Version(string: "1.0.0-alpha.1")!)
-        XCTAssertLessThan(Version(string: "1.0.0-alpha.1")!, Version(string: "1.0.0-alpha.beta")!)
-        XCTAssertLessThan(Version(string: "1.0.0-alpha.beta")!, Version(string: "1.0.0-beta")!)
-        XCTAssertLessThan(Version(string: "1.0.0-beta")!, Version(string: "1.0.0-beta.2")!)
-        XCTAssertLessThan(Version(string: "1.0.0-beta.2")!, Version(string: "1.0.0-beta.11")!)
-        XCTAssertLessThan(Version(string: "1.0.0-beta.11")!, Version(string: "1.0.0-rc.1")!)
-        XCTAssertLessThan(Version(string: "1.0.0-rc.1")!, Version(string: "1.0.0")!)
-        XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "1.0.1-alpha")!)
-        XCTAssertLessThan(Version(string: "1.0.1-alpha")!, Version(string: "1.0.1-alpha.1")!)
+        XCTAssert(Version(string: "1.0.0-alpha")! < Version(string: "1.0.0")!)
         
-        XCTAssertEqual([Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!].sort(<), [Version(string: "1.0.0-alpha.3")!, Version(string: "1.0.0-beta.1")!])
-        XCTAssertEqual([Version(string: "2.0.0")!, Version(string: "1.0.0-beta.1")!].sort(<), [Version(string: "1.0.0-beta.1")!, Version(string: "2.0.0")!])
-        XCTAssertEqual(Version(string: "1.0.0")!.next().sort(<), [Version(string: "1.0.1-alpha.1")!, Version(string: "1.1.0-alpha.1")!, Version(string: "2.0.0-alpha.1")!])
+        do {
+            XCTAssertLessThan(Version(string: "1.0.0-alpha")!, Version(string: "1.0.0-alpha.1")!)
+            XCTAssertLessThan(Version(string: "1.0.0-alpha.1")!, Version(string: "1.0.0-alpha.beta")!)
+            XCTAssertLessThan(Version(string: "1.0.0-alpha.beta")!, Version(string: "1.0.0-beta")!)
+            XCTAssertLessThan(Version(string: "1.0.0-beta")!, Version(string: "1.0.0-beta.2")!)
+            XCTAssertLessThan(Version(string: "1.0.0-beta.2")!, Version(string: "1.0.0-beta.11")!)
+            XCTAssertLessThan(Version(string: "1.0.0-beta.11")!, Version(string: "1.0.0-rc.1")!)
+            XCTAssertLessThan(Version(string: "1.0.0-rc.1")!, Version(string: "1.0.0")!)
+            
+            let versions: [Version] = [
+                "1.0.0-alpha",
+                "1.0.0-alpha.1",
+                "1.0.0-alpha.beta",
+                "1.0.0-beta",
+                "1.0.0-beta.2",
+                "1.0.0-beta.11",
+                "1.0.0-rc.1",
+                "1.0.0",
+            ]
+            XCTAssertEqual(versions.shuffle().sort(<), versions)
+        }
     }
     
     func testVersionNext() {
