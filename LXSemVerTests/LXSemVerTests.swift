@@ -150,9 +150,14 @@ class LXSemVerTests: XCTestCase {
     }
     
     func testVersion() {
-        XCTAssertEqual(Version(string: "0.0.0")!, Version(major: 0, minor: 0, patch: 0))
-        XCTAssertEqual(Version(string: "0.0.0-alpha")!, Version(major: 0, minor: 0, patch: 0, prerelease: [ "alpha" ]))
-        XCTAssertEqual(Version(string: "1.0.0-beta.2+exp.sha.5114f85")!, Version(major: 1, minor: 0, patch: 0, prerelease: [ "beta", "2" ], buildMetadata: "exp.sha.5114f85"))
+        XCTAssertNil(Version(string: "0.0.0-.alpha"))
+        XCTAssertNil(Version(string: "0.0.0-beta.2+..."))
+        
+        XCTAssertNil(Version(string: "0.0.0-alpha..1"))
+        
+        XCTAssertEqual(Version(stringLiteral: "0.0.0"), Version(major: 0, minor: 0, patch: 0))
+        XCTAssertEqual(Version(stringLiteral: "0.0.0-alpha"), Version(major: 0, minor: 0, patch: 0, prerelease: [ "alpha" ]))
+        XCTAssertEqual(Version(stringLiteral: "1.0.0-beta.2+exp.sha.5114f85"), Version(major: 1, minor: 0, patch: 0, prerelease: [ "beta", "2" ], buildMetadata: "exp.sha.5114f85"))
     }
     
     func testSemVer_2_0_0_Spec_2() {
@@ -176,9 +181,9 @@ class LXSemVerTests: XCTestCase {
     
     func testSemVer_2_0_0_Spec_11() {
         do {
-            XCTAssertLessThan(Version(string: "1.0.0")!, Version(string: "2.0.0")!)
-            XCTAssertLessThan(Version(string: "2.0.0")!, Version(string: "2.1.0")!)
-            XCTAssertLessThan(Version(string: "2.1.0")!, Version(string: "2.1.1")!)
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0"), Version(stringLiteral: "2.0.0"))
+            XCTAssertLessThan(Version(stringLiteral: "2.0.0"), Version(stringLiteral: "2.1.0"))
+            XCTAssertLessThan(Version(stringLiteral: "2.1.0"), Version(stringLiteral: "2.1.1"))
             
             let versions: [Version] = [
                 "1.0.0",
@@ -189,16 +194,16 @@ class LXSemVerTests: XCTestCase {
             XCTAssertEqual(versions.shuffle().sort(<), versions)
         }
         
-        XCTAssert(Version(string: "1.0.0-alpha")! < Version(string: "1.0.0")!)
+        XCTAssert(Version(stringLiteral: "1.0.0-alpha") < Version(stringLiteral: "1.0.0"))
         
         do {
-            XCTAssertLessThan(Version(string: "1.0.0-alpha")!, Version(string: "1.0.0-alpha.1")!)
-            XCTAssertLessThan(Version(string: "1.0.0-alpha.1")!, Version(string: "1.0.0-alpha.beta")!)
-            XCTAssertLessThan(Version(string: "1.0.0-alpha.beta")!, Version(string: "1.0.0-beta")!)
-            XCTAssertLessThan(Version(string: "1.0.0-beta")!, Version(string: "1.0.0-beta.2")!)
-            XCTAssertLessThan(Version(string: "1.0.0-beta.2")!, Version(string: "1.0.0-beta.11")!)
-            XCTAssertLessThan(Version(string: "1.0.0-beta.11")!, Version(string: "1.0.0-rc.1")!)
-            XCTAssertLessThan(Version(string: "1.0.0-rc.1")!, Version(string: "1.0.0")!)
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-alpha"), Version(stringLiteral: "1.0.0-alpha.1"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-alpha.1"), Version(stringLiteral: "1.0.0-alpha.beta"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-alpha.beta"), Version(stringLiteral: "1.0.0-beta"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-beta"), Version(stringLiteral: "1.0.0-beta.2"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-beta.2"), Version(stringLiteral: "1.0.0-beta.11"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-beta.11"), Version(stringLiteral: "1.0.0-rc.1"))
+            XCTAssertLessThan(Version(stringLiteral: "1.0.0-rc.1"), Version(stringLiteral: "1.0.0"))
             
             let versions: [Version] = [
                 "1.0.0-alpha",
