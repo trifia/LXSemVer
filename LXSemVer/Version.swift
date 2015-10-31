@@ -15,9 +15,15 @@ public struct DotSeparatedValues {
         self.values = values
     }
     
-    public init(string: String) {
-        let values = string.characters.split(".").map(String.init)
-        self.init(values: values)
+    public init?(string: String) {
+        let values = string.characters.split(".", maxSplit: Int.max, allowEmptySlices: true)
+        assert(!values.isEmpty)
+        for value in values {
+            if value.isEmpty {
+                return nil
+            }
+        }
+        self.init(values: values.map(String.init))
     }
 }
 
@@ -59,15 +65,15 @@ extension DotSeparatedValues : ArrayLiteralConvertible {
 
 extension DotSeparatedValues : StringLiteralConvertible {
     public init(unicodeScalarLiteral value: String) {
-        self.init(string: value)
+        self.init(string: value)!
     }
     
     public init(extendedGraphemeClusterLiteral value: String) {
-        self.init(string: value)
+        self.init(string: value)!
     }
     
     public init(stringLiteral value: String) {
-        self.init(string: value)
+        self.init(string: value)!
     }
 }
 

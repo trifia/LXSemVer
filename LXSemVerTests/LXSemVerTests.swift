@@ -38,6 +38,71 @@ private func hasMatch(string: String, regex: NSRegularExpression) -> Bool {
     return numberOfMatches > 0
 }
 
+class DotSeparatedValuesTests: XCTestCase {
+    func testInstantiation() {
+        XCTAssertNil(DotSeparatedValues(string: ""))
+        XCTAssertNil(DotSeparatedValues(string: "."))
+        XCTAssertNil(DotSeparatedValues(string: "1..1"))
+        XCTAssertNil(DotSeparatedValues(string: ".1"))
+    }
+    
+    func testDescription() {
+        XCTAssertEqual(DotSeparatedValues(stringLiteral: "0.0.0").description, "0.0.0")
+    }
+    
+    func testComparable() {
+        XCTAssert(DotSeparatedValues(stringLiteral: "1.0.0") < DotSeparatedValues(stringLiteral: "2.0.0"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "2.0.0") < DotSeparatedValues(stringLiteral: "2.1.0"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "2.1.0") < DotSeparatedValues(stringLiteral: "2.1.1"))
+        
+        XCTAssertFalse(DotSeparatedValues(stringLiteral: "1.0.0") > DotSeparatedValues(stringLiteral: "2.0.0"))
+        XCTAssertFalse(DotSeparatedValues(stringLiteral: "2.0.0") > DotSeparatedValues(stringLiteral: "2.1.0"))
+        XCTAssertFalse(DotSeparatedValues(stringLiteral: "2.1.0") > DotSeparatedValues(stringLiteral: "2.1.1"))
+        
+        XCTAssert(DotSeparatedValues(stringLiteral: "alpha") < DotSeparatedValues(stringLiteral: "alpha.1"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "alpha.1") < DotSeparatedValues(stringLiteral: "alpha.beta"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "alpha.beta") < DotSeparatedValues(stringLiteral: "beta"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "beta") < DotSeparatedValues(stringLiteral: "beta.2"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "beta.2") < DotSeparatedValues(stringLiteral: "beta.11"))
+        XCTAssert(DotSeparatedValues(stringLiteral: "beta.11") < DotSeparatedValues(stringLiteral: "rc.1"))
+        
+        XCTAssertFalse(DotSeparatedValues(stringLiteral: "alpha") > DotSeparatedValues(stringLiteral: "alpha.1"))
+        XCTAssertFalse(DotSeparatedValues(stringLiteral: "alpha.1") > DotSeparatedValues(stringLiteral: "alpha.beta"))
+    }
+    
+    func testNext() {
+        XCTAssertEqual(
+            DotSeparatedValues(stringLiteral: "alpha").next(),
+            [
+                DotSeparatedValues(stringLiteral: "alpha.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(stringLiteral: "alpha.1").next(),
+            [
+                DotSeparatedValues(stringLiteral: "alpha.2")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(stringLiteral: "alpha.beta").next(),
+            [
+                DotSeparatedValues(stringLiteral: "alpha.1"),
+                DotSeparatedValues(stringLiteral: "alpha.beta.1")
+            ]
+        )
+        
+        XCTAssertEqual(
+            DotSeparatedValues(stringLiteral: "alpha.beta.1").next(),
+            [
+                DotSeparatedValues(stringLiteral: "alpha.1"),
+                DotSeparatedValues(stringLiteral: "alpha.beta.2")
+            ]
+        )
+    }
+}
+
 class LXSemVerTests: XCTestCase {
     func testVersionNumberPattern() {
         let regex = try! NSRegularExpression(pattern: "\\A\(Version.versionNumberPattern)\\z", options: [])
@@ -88,58 +153,6 @@ class LXSemVerTests: XCTestCase {
         XCTAssertEqual(Version(string: "0.0.0")!, Version(major: 0, minor: 0, patch: 0))
         XCTAssertEqual(Version(string: "0.0.0-alpha")!, Version(major: 0, minor: 0, patch: 0, prerelease: [ "alpha" ]))
         XCTAssertEqual(Version(string: "1.0.0-beta.2+exp.sha.5114f85")!, Version(major: 1, minor: 0, patch: 0, prerelease: [ "beta", "2" ], buildMetadata: "exp.sha.5114f85"))
-    }
-    
-    func testDotSeparatedValuesComparison() {
-        XCTAssert(DotSeparatedValues(string: "1.0.0") < DotSeparatedValues(string: "2.0.0"))
-        XCTAssert(DotSeparatedValues(string: "2.0.0") < DotSeparatedValues(string: "2.1.0"))
-        XCTAssert(DotSeparatedValues(string: "2.1.0") < DotSeparatedValues(string: "2.1.1"))
-        
-        XCTAssertFalse(DotSeparatedValues(string: "1.0.0") > DotSeparatedValues(string: "2.0.0"))
-        XCTAssertFalse(DotSeparatedValues(string: "2.0.0") > DotSeparatedValues(string: "2.1.0"))
-        XCTAssertFalse(DotSeparatedValues(string: "2.1.0") > DotSeparatedValues(string: "2.1.1"))
-        
-        XCTAssert(DotSeparatedValues(string: "alpha") < DotSeparatedValues(string: "alpha.1"))
-        XCTAssert(DotSeparatedValues(string: "alpha.1") < DotSeparatedValues(string: "alpha.beta"))
-        XCTAssert(DotSeparatedValues(string: "alpha.beta") < DotSeparatedValues(string: "beta"))
-        XCTAssert(DotSeparatedValues(string: "beta") < DotSeparatedValues(string: "beta.2"))
-        XCTAssert(DotSeparatedValues(string: "beta.2") < DotSeparatedValues(string: "beta.11"))
-        XCTAssert(DotSeparatedValues(string: "beta.11") < DotSeparatedValues(string: "rc.1"))
-        
-        XCTAssertFalse(DotSeparatedValues(string: "alpha") > DotSeparatedValues(string: "alpha.1"))
-        XCTAssertFalse(DotSeparatedValues(string: "alpha.1") > DotSeparatedValues(string: "alpha.beta"))
-    }
-    
-    func testDotSeparatedValuesNext() {
-        XCTAssertEqual(
-            DotSeparatedValues(string: "alpha").next(),
-            [
-                DotSeparatedValues(string: "alpha.1")
-            ]
-        )
-        
-        XCTAssertEqual(
-            DotSeparatedValues(string: "alpha.1").next(),
-            [
-                DotSeparatedValues(string: "alpha.2")
-            ]
-        )
-        
-        XCTAssertEqual(
-            DotSeparatedValues(string: "alpha.beta").next(),
-            [
-                DotSeparatedValues(string: "alpha.1"),
-                DotSeparatedValues(string: "alpha.beta.1")
-            ]
-        )
-        
-        XCTAssertEqual(
-            DotSeparatedValues(string: "alpha.beta.1").next(),
-            [
-                DotSeparatedValues(string: "alpha.1"),
-                DotSeparatedValues(string: "alpha.beta.2")
-            ]
-        )
     }
     
     func testSemVer_2_0_0_Spec_2() {
