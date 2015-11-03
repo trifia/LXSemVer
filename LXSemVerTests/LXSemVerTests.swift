@@ -160,6 +160,12 @@ class VersionTests: XCTestCase {
         XCTAssertEqual(Version(stringLiteral: "1.0.0-beta.2+exp.sha.5114f85"), Version(major: 1, minor: 0, patch: 0, prerelease: [ "beta", "2" ], buildMetadata: "exp.sha.5114f85"))
     }
     
+    func testDescription() {
+        XCTAssertEqual(Version(stringLiteral: "0.0.0").description, "0.0.0")
+        XCTAssertEqual(Version(stringLiteral: "0.0.0-alpha").description, "0.0.0-alpha")
+        XCTAssertEqual(Version(stringLiteral: "1.0.0-beta.2+exp.sha.5114f85").description, "1.0.0-beta.2+exp.sha.5114f85")
+    }
+    
     func testSemVer_2_0_0_Spec_2() {
         // Ensure Swift does not overflow when casting the string "-1" to an unsigned integer value.
         XCTAssertNil(UInt("-1"))
@@ -258,6 +264,13 @@ class VersionTests: XCTestCase {
             [
                 Version(major: 1, minor: 0, patch: 0, prerelease: "rc.4"),
                 Version(major: 1, minor: 0, patch: 0)
+            ]
+        )
+        
+        XCTAssertEqual(
+            Version(stringLiteral: "1.0.0-nightly.1").next(),
+            [
+                Version(stringLiteral: "1.0.0-nightly.2")
             ]
         )
     }
