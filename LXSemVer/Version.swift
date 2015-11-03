@@ -123,9 +123,7 @@ public struct Version {
         if prereleaseRange.length > 0 {
             let prereleaseString = (string as NSString).substringWithRange(NSRange(location: prereleaseRange.location + 1, length: prereleaseRange.length - 1))
             prerelease = DotSeparatedValues(string: prereleaseString)
-            if (prerelease == nil) {
-                return nil
-            }
+            assert(prerelease != nil)
         }
         
         var buildMetadata: DotSeparatedValues? = nil
@@ -133,9 +131,7 @@ public struct Version {
         if buildMetadataRange.length > 0 {
             let buildMetadataString = (string as NSString).substringWithRange(NSRange(location: buildMetadataRange.location + 1, length: buildMetadataRange.length - 1))
             buildMetadata = DotSeparatedValues(string: buildMetadataString)
-            if (buildMetadata == nil) {
-                return nil
-            }
+            assert(buildMetadata != nil)
         }
         
         self.init(major: major, minor: minor, patch: patch, prerelease: prerelease, buildMetadata: buildMetadata)

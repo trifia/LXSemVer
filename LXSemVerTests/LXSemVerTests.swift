@@ -162,6 +162,9 @@ class VersionTests: XCTestCase {
         XCTAssertNil(Version(string: "0.0.0-alpha..1"))
         XCTAssertNil(Version(string: "0.0.0-📱.1"))
         
+        XCTAssertNil(Version(string: "0.0.0-"))
+        XCTAssertNil(Version(string: "0.0.0+"))
+        
         XCTAssertEqual(Version(unicodeScalarLiteral: "0.0.0"), Version(major: 0, minor: 0, patch: 0))
         XCTAssertEqual(Version(extendedGraphemeClusterLiteral: "0.0.0-alpha"), Version(major: 0, minor: 0, patch: 0, prerelease: [ "alpha" ]))
         XCTAssertEqual(Version(stringLiteral: "1.0.0-beta.2+exp.sha.5114f85"), Version(major: 1, minor: 0, patch: 0, prerelease: [ "beta", "2" ], buildMetadata: "exp.sha.5114f85"))
