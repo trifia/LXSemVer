@@ -40,10 +40,16 @@ private func hasMatch(string: String, regex: NSRegularExpression) -> Bool {
 
 class DotSeparatedValuesTests: XCTestCase {
     func testInstantiation() {
+        XCTAssertNil(DotSeparatedValues(values: []))
+        
         XCTAssertNil(DotSeparatedValues(string: ""))
         XCTAssertNil(DotSeparatedValues(string: "."))
         XCTAssertNil(DotSeparatedValues(string: "1..1"))
         XCTAssertNil(DotSeparatedValues(string: ".1"))
+        
+        XCTAssertEqual(DotSeparatedValues(unicodeScalarLiteral: "alpha"), DotSeparatedValues(values: ["alpha"]))
+        XCTAssertEqual(DotSeparatedValues(extendedGraphemeClusterLiteral: "alpha.beta"), DotSeparatedValues(values: ["alpha", "beta"]))
+        XCTAssertEqual(DotSeparatedValues(stringLiteral: "1.0.0"), DotSeparatedValues(values: ["1", "0", "0"]))
     }
     
     func testDescription() {

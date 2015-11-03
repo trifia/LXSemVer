@@ -11,7 +11,10 @@ import Foundation
 public struct DotSeparatedValues {
     public let values: [String]
     
-    public init(values: [String]) {
+    public init?(values: [String]) {
+        guard !values.isEmpty else {
+            return nil
+        }
         self.values = values
     }
     
@@ -59,7 +62,7 @@ public func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
 
 extension DotSeparatedValues : ArrayLiteralConvertible {
     public init(arrayLiteral elements: String...) {
-        self.init(values: elements)
+        self.init(values: elements)!
     }
 }
 
@@ -199,7 +202,7 @@ extension DotSeparatedValues {
             if let num = Int(value) {
                 var valueSlice = self.values[0...index]
                 valueSlice[index] = String(num + 1)
-                result.append(DotSeparatedValues(values: Array(valueSlice)))
+                result.append(DotSeparatedValues(values: Array(valueSlice))!)
                 continue
             }
             
@@ -210,7 +213,7 @@ extension DotSeparatedValues {
             
             var newValues = Array(self.values[0...index])
             newValues.append("1")
-            result.append(DotSeparatedValues(values: newValues))
+            result.append(DotSeparatedValues(values: newValues)!)
         }
         return result
     }
