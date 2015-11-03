@@ -103,7 +103,7 @@ class DotSeparatedValuesTests: XCTestCase {
     }
 }
 
-class LXSemVerTests: XCTestCase {
+class VersionTests: XCTestCase {
     func testVersionNumberPattern() {
         let regex = try! NSRegularExpression(pattern: "\\A\(Version.versionNumberPattern)\\z", options: [])
         
@@ -149,7 +149,7 @@ class LXSemVerTests: XCTestCase {
         XCTAssert(hasMatch("1.0.0-beta+exp.sha.5114f85", regex: regex))
     }
     
-    func testVersion() {
+    func testInstantiation() {
         XCTAssertNil(Version(string: "0.0.0-.alpha"))
         XCTAssertNil(Version(string: "0.0.0-beta.2+..."))
         
