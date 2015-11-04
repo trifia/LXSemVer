@@ -20,3 +20,9 @@ At any specific version, there are multiple logical paths leading to the next ve
 `LXSemVer` extends on SemVer by recognizing `alpha`, `beta` and `rc` as the first prerelease identifiers.
 
 Together, they make `LXSemVer` an excellent choice for versioning management. 
+
+## Usage
+
+```
+TODO
+```
