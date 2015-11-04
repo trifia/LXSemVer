@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/lxcid/LXSemVer.svg?branch=master)](https://travis-ci.org/lxcid/LXSemVer)
+[![Coverage Status](https://coveralls.io/repos/lxcid/LXSemVer/badge.svg?branch=master&service=github)](https://coveralls.io/github/lxcid/LXSemVer?branch=master)
+
 # LXSemVer
 
 `LXSemVer` aims to provide a simple yet specification compliant implementation of [Semantic Versioning 2.0.0](http://semver.org/) (SemVer) in Swift 2.x.
