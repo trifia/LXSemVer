@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		AB0D1FE71BD6E644003971A3 /* LXSemVer.h in Headers */ = {isa = PBXBuildFile; fileRef = AB0D1FE61BD6E644003971A3 /* LXSemVer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AB0D1FEE1BD6E644003971A3 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0D1FE31BD6E644003971A3 /* LXSemVer.framework */; settings = {ASSET_TAGS = (); }; };
+		AB0D1FEE1BD6E644003971A3 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0D1FE31BD6E644003971A3 /* LXSemVer.framework */; };
 		AB0D1FF31BD6E644003971A3 /* LXSemVerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0D1FF21BD6E644003971A3 /* LXSemVerTests.swift */; };
-		AB0D1FFE1BD6E64E003971A3 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0D1FFD1BD6E64E003971A3 /* Version.swift */; settings = {ASSET_TAGS = (); }; };
+		AB0D1FFE1BD6E64E003971A3 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0D1FFD1BD6E64E003971A3 /* Version.swift */; };
 		AB9C2A9D1BD8247B00729B33 /* LXSemVer.h in Headers */ = {isa = PBXBuildFile; fileRef = AB9C2A9C1BD8247B00729B33 /* LXSemVer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AB9C2AA41BD8247B00729B33 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB9C2A9A1BD8247B00729B33 /* LXSemVer.framework */; settings = {ASSET_TAGS = (); }; };
-		AB9C2AB51BD8268100729B33 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB31BD8268100729B33 /* Version.swift */; settings = {ASSET_TAGS = (); }; };
-		AB9C2AB81BD8268E00729B33 /* LXSemVerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB61BD8268E00729B33 /* LXSemVerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		AB9C2AA41BD8247B00729B33 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB9C2A9A1BD8247B00729B33 /* LXSemVer.framework */; };
+		AB9C2AB51BD8268100729B33 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB31BD8268100729B33 /* Version.swift */; };
+		AB9C2AB81BD8268E00729B33 /* LXSemVerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB61BD8268E00729B33 /* LXSemVerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -388,6 +388,8 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -435,6 +437,8 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -610,6 +614,7 @@
 				AB9C2AAD1BD8247B00729B33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AB9C2AAE1BD8247B00729B33 /* Build configuration list for PBXNativeTarget "LXSemVerTests" */ = {
 			isa = XCConfigurationList;
@@ -618,6 +623,7 @@
 				AB9C2AB01BD8247B00729B33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
