@@ -1,0 +1,4 @@
+language: swift
+osx_image: xcode7.1
+script:
+	- "xctool -project LXSemVer.xcodeproj -scheme LXSemVer_OSX -sdk macosx build test"
