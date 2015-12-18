@@ -6,8 +6,6 @@
 //  Copyright © 2015 lxcid. All rights reserved.
 //
 
-import Foundation
-
 public struct Version {
     public let major: UInt
     public let minor: UInt
