@@ -110,51 +110,6 @@ class DotSeparatedValuesTests: XCTestCase {
 }
 
 class VersionTests: XCTestCase {
-    func testVersionNumberPattern() {
-        let regex = try! NSRegularExpression(pattern: "\\A\(Version.versionNumberPattern)\\z", options: [])
-        
-        XCTAssert(hasMatch("0", regex: regex))
-        XCTAssertFalse(hasMatch("01", regex: regex))
-        XCTAssert(hasMatch("1", regex: regex))
-        XCTAssert(hasMatch("9", regex: regex))
-        XCTAssert(hasMatch("10", regex: regex))
-        XCTAssert(hasMatch("234", regex: regex))
-    }
-    
-    func testPrereleasePattern() {
-        let regex = try! NSRegularExpression(pattern: "\\A\(Version.prereleasePattern)\\z", options: [])
-        
-        XCTAssert(hasMatch("-alpha", regex: regex))
-        XCTAssert(hasMatch("-alpha.1", regex: regex))
-        XCTAssert(hasMatch("-0.3.7", regex: regex))
-        XCTAssert(hasMatch("-x.7.z.92", regex: regex))
-    }
-    
-    func testBuildMetadataPattern() {
-        let regex = try! NSRegularExpression(pattern: "\\A\(Version.buildMetadataPattern)\\z", options: [])
-        
-        XCTAssert(hasMatch("+001", regex: regex))
-        XCTAssert(hasMatch("+20130313144700", regex: regex))
-        XCTAssert(hasMatch("+exp.sha.5114f85", regex: regex))
-    }
-    
-    func testSemanticVersioningPattern() {
-        let regex = try! NSRegularExpression(pattern: "\\A\(Version.semanticVersioningPattern)\\z", options: [])
-        
-        XCTAssert(hasMatch("0.0.0", regex: regex))
-        XCTAssert(hasMatch("0.0.0-alpha", regex: regex))
-        XCTAssert(hasMatch("1.0.0-alpha+001", regex: regex))
-        
-        XCTAssert(hasMatch("1.0.0-alpha", regex: regex))
-        XCTAssert(hasMatch("1.0.0-alpha.1", regex: regex))
-        XCTAssert(hasMatch("1.0.0-0.3.7", regex: regex))
-        XCTAssert(hasMatch("1.0.0-x.7.z.92", regex: regex))
-        
-        XCTAssert(hasMatch("1.0.0-alpha+001", regex: regex))
-        XCTAssert(hasMatch("1.0.0+20130313144700", regex: regex))
-        XCTAssert(hasMatch("1.0.0-beta+exp.sha.5114f85", regex: regex))
-    }
-    
     func testInstantiation() {
         XCTAssertNil(Version(string: "0.0.0-.alpha"))
         XCTAssertNil(Version(string: "0.0.0-beta.2+..."))

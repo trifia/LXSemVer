@@ -9,12 +9,6 @@
 import Foundation
 
 public struct Version {
-    // https://github.com/sindresorhus/semver-regex
-    static let versionNumberPattern = "(?:0|[1-9][0-9]*)"
-    static let prereleasePattern = "(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)"
-    static let buildMetadataPattern = "(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)"
-    static let semanticVersioningPattern = "\\A(\(versionNumberPattern))\\.(\(versionNumberPattern))\\.(\(versionNumberPattern))(\(prereleasePattern)?)(\(buildMetadataPattern)?)\\z"
-    
     public let major: UInt
     public let minor: UInt
     public let patch: UInt
@@ -29,34 +23,43 @@ public struct Version {
         self.buildMetadata = buildMetadata
     }
     
-    public init?(string: String) {
-        guard
-            let regex = try? NSRegularExpression(pattern: "\\A\(Version.semanticVersioningPattern)\\z", options: []),
-            let match = regex.firstMatchInString(string, options: [], range: NSRange(location: 0, length: string.characters.count)),
-            let major = UInt((string as NSString).substringWithRange(match.rangeAtIndex(1))),
-            let minor = UInt((string as NSString).substringWithRange(match.rangeAtIndex(2))),
-            let patch = UInt((string as NSString).substringWithRange(match.rangeAtIndex(3)))
-            else {
-                return nil
+    // Heavily referenced from Swift Package Manager to build a non regex version
+    public init?(characters: String.CharacterView) {
+        let prereleaseStartIndex = characters.indexOf("-")
+        let buildMetadataStartIndex = characters.indexOf("+")
+        
+        let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? characters.endIndex
+        let versionCharacters = characters.prefixUpTo(versionEndIndex)
+        let versionComponents = versionCharacters.split(".", maxSplit: 2, allowEmptySlices: true).map{ String($0) }.flatMap{ UInt($0) }
+        
+        guard versionComponents.count == 3 else {
+            return nil
         }
         
         var prerelease: DotSeparatedValues? = nil
-        let prereleaseRange = match.rangeAtIndex(4)
-        if prereleaseRange.length > 0 {
-            let prereleaseString = (string as NSString).substringWithRange(NSRange(location: prereleaseRange.location + 1, length: prereleaseRange.length - 1))
-            prerelease = DotSeparatedValues(string: prereleaseString)
-            assert(prerelease != nil)
+        if let prereleaseStartIndex = prereleaseStartIndex {
+            let prereleaseEndIndex = buildMetadataStartIndex ?? characters.endIndex
+            let prereleaseCharacters = characters[prereleaseStartIndex.successor()..<prereleaseEndIndex]
+            prerelease = DotSeparatedValues(characters: prereleaseCharacters)
+            if prerelease == nil {
+                return nil
+            }
         }
         
         var buildMetadata: DotSeparatedValues? = nil
-        let buildMetadataRange = match.rangeAtIndex(5)
-        if buildMetadataRange.length > 0 {
-            let buildMetadataString = (string as NSString).substringWithRange(NSRange(location: buildMetadataRange.location + 1, length: buildMetadataRange.length - 1))
-            buildMetadata = DotSeparatedValues(string: buildMetadataString)
-            assert(buildMetadata != nil)
+        if let buildMetadataStartIndex = buildMetadataStartIndex {
+            let buildMetadataCharacters = characters.suffixFrom(buildMetadataStartIndex.successor())
+            buildMetadata = DotSeparatedValues(characters: buildMetadataCharacters)
+            if buildMetadata == nil {
+                return nil
+            }
         }
         
-        self.init(major: major, minor: minor, patch: patch, prerelease: prerelease, buildMetadata: buildMetadata)
+        self.init(major: versionComponents[0], minor: versionComponents[1], patch: versionComponents[2], prerelease: prerelease, buildMetadata: buildMetadata)
+    }
+    
+    public init?(string: String) {
+        self.init(characters: string.characters)
     }
 }
 
