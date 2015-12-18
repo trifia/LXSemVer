@@ -1,15 +1,8 @@
 public struct DotSeparatedValues {
     public let values: [String]
     
-    public init?(values: [String]) {
-        guard !values.isEmpty else {
-            return nil
-        }
-        self.values = values
-    }
-    
-    public init?(string: String) {
-        let values = string.characters.split(".", maxSplit: Int.max, allowEmptySlices: true)
+    public init?(characters: String.CharacterView) {
+        let values = characters.split(".", maxSplit: Int.max, allowEmptySlices: true)
         assert(!values.isEmpty)
         for value in values {
             if value.isEmpty {
@@ -17,6 +10,17 @@ public struct DotSeparatedValues {
             }
         }
         self.init(values: values.map(String.init))
+    }
+    
+    public init?(string: String) {
+        self.init(characters: string.characters)
+    }
+    
+    public init?(values: [String]) {
+        guard !values.isEmpty else {
+            return nil
+        }
+        self.values = values
     }
 }
 
