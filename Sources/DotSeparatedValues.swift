@@ -20,6 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+func isValidValue(characters: String.CharacterView) -> Bool {
+    if characters.isEmpty {
+        return false
+    }
+    for character in characters {
+        if character > Character(UnicodeScalar(127)) {
+            return false
+        }
+    }
+    return true
+}
+
 public struct DotSeparatedValues {
     public let values: [String]
     
@@ -27,7 +39,7 @@ public struct DotSeparatedValues {
         let values = characters.split(".", maxSplit: Int.max, allowEmptySlices: true)
         assert(!values.isEmpty)
         for value in values {
-            if value.isEmpty {
+            if !isValidValue(value) {
                 return nil
             }
         }
