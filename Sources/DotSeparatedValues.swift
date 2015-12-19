@@ -24,8 +24,21 @@ func isValidValue(characters: String.CharacterView) -> Bool {
     if characters.isEmpty {
         return false
     }
+    var isNumeric = true
     for character in characters {
-        if character > Character(UnicodeScalar(127)) {
+        switch character {
+        case "-", /* hyphen */
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", /* uppercase alphabets */
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"  /* lowercase alphabets */:
+            isNumeric = false
+        case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" /* numerics */:
+            break
+        default:
+            return false
+        }
+    }
+    if isNumeric && characters.count > 1 {
+        guard let firstCharacter = characters.first where firstCharacter != "0" else {
             return false
         }
     }

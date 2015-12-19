@@ -46,6 +46,9 @@ class DotSeparatedValuesTests: XCTestCase {
         XCTAssertNil(DotSeparatedValues(string: "."))
         XCTAssertNil(DotSeparatedValues(string: "1..1"))
         XCTAssertNil(DotSeparatedValues(string: ".1"))
+        XCTAssertNil(DotSeparatedValues(string: "🐮🐶.moof"))
+        XCTAssertNil(DotSeparatedValues(string: "1.01"))
+        XCTAssertNil(DotSeparatedValues(string: "\\"))
         
         XCTAssertEqual(DotSeparatedValues(unicodeScalarLiteral: "alpha"), DotSeparatedValues(values: ["alpha"]))
         XCTAssertEqual(DotSeparatedValues(extendedGraphemeClusterLiteral: "alpha.beta"), DotSeparatedValues(values: ["alpha", "beta"]))
