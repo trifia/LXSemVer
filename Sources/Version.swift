@@ -6,6 +6,19 @@
 //  Copyright © 2015 lxcid. All rights reserved.
 //
 
+func versionComponentFromCharacters(characters: String.CharacterView) -> UInt? {
+    let charactersCount = characters.count
+    guard charactersCount > 0 else {
+        return nil
+    }
+    if charactersCount > 1 {
+        guard let firstCharacter = characters.first where firstCharacter != "0" else {
+            return nil
+        }
+    }
+    return UInt(String(characters))
+}
+
 public struct Version {
     public let major: UInt
     public let minor: UInt
@@ -28,7 +41,7 @@ public struct Version {
         
         let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? characters.endIndex
         let versionCharacters = characters.prefixUpTo(versionEndIndex)
-        let versionComponents = versionCharacters.split(".", maxSplit: 2, allowEmptySlices: true).map{ String($0) }.flatMap{ UInt($0) }
+        let versionComponents = versionCharacters.split(".", maxSplit: 2, allowEmptySlices: true).flatMap(versionComponentFromCharacters)
         
         guard versionComponents.count == 3 else {
             return nil
