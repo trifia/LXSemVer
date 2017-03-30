@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-func versionComponentFromCharacters(characters: String.CharacterView) -> UInt? {
+func versionComponentFromCharacters(_ characters: String.CharacterView) -> UInt? {
     let charactersCount = characters.count
     guard charactersCount > 0 else {
         return nil
     }
     if charactersCount > 1 {
-        guard let firstCharacter = characters.first where firstCharacter != "0" else {
+        guard let firstCharacter = characters.first, firstCharacter != "0" else {
             return nil
         }
     }
@@ -50,12 +50,12 @@ public struct Version {
     
     // Heavily referenced from Swift Package Manager to build a non regex version
     public init?(characters: String.CharacterView) {
-        let prereleaseStartIndex = characters.indexOf("-")
-        let buildMetadataStartIndex = characters.indexOf("+")
+        let prereleaseStartIndex = characters.index(of: "-")
+        let buildMetadataStartIndex = characters.index(of: "+")
         
         let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? characters.endIndex
-        let versionCharacters = characters.prefixUpTo(versionEndIndex)
-        let versionComponents = versionCharacters.split(".", maxSplit: 2, allowEmptySlices: true).flatMap(versionComponentFromCharacters)
+        let versionCharacters = characters.prefix(upTo: versionEndIndex)
+        let versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).flatMap(versionComponentFromCharacters)
         
         guard versionComponents.count == 3 else {
             return nil
@@ -64,7 +64,7 @@ public struct Version {
         var prerelease: DotSeparatedValues? = nil
         if let prereleaseStartIndex = prereleaseStartIndex {
             let prereleaseEndIndex = buildMetadataStartIndex ?? characters.endIndex
-            let prereleaseCharacters = characters[prereleaseStartIndex.successor()..<prereleaseEndIndex]
+            let prereleaseCharacters = characters[characters.index(after: prereleaseStartIndex)..<prereleaseEndIndex]
             prerelease = DotSeparatedValues(characters: prereleaseCharacters)
             if prerelease == nil {
                 return nil
@@ -73,7 +73,7 @@ public struct Version {
         
         var buildMetadata: DotSeparatedValues? = nil
         if let buildMetadataStartIndex = buildMetadataStartIndex {
-            let buildMetadataCharacters = characters.suffixFrom(buildMetadataStartIndex.successor())
+            let buildMetadataCharacters = characters.suffix(from: characters.index(after: buildMetadataStartIndex))
             buildMetadata = DotSeparatedValues(characters: buildMetadataCharacters)
             if buildMetadata == nil {
                 return nil
@@ -105,7 +105,7 @@ public func <(lhs: Version, rhs: Version) -> Bool {
         return lhs.minor < rhs.minor
     } else if lhs.patch != rhs.patch {
         return lhs.patch < rhs.patch
-    } else if let lprv = lhs.prerelease, let rprv = rhs.prerelease where lprv != rprv {
+    } else if let lprv = lhs.prerelease, let rprv = rhs.prerelease, lprv != rprv {
         return lprv < rprv
     } else if lhs.prerelease != nil && rhs.prerelease == nil {
         return true
@@ -114,7 +114,7 @@ public func <(lhs: Version, rhs: Version) -> Bool {
     }
 }
 
-extension Version : StringLiteralConvertible {
+extension Version : ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self.init(string: value)!
     }
@@ -145,7 +145,7 @@ extension Version {
     public func next() -> [Version] {
         if let prerelease = self.prerelease {
             var versions = prerelease.next().map { Version(major: self.major, minor: self.minor, patch: self.patch, prerelease: $0) }
-            if let firstPrereleaseIdentifier = prerelease.values.first?.lowercaseString {
+            if let firstPrereleaseIdentifier = prerelease.values.first?.lowercased() {
                 switch firstPrereleaseIdentifier {
                 case "alpha":
                     versions.append(Version(major: self.major, minor: self.minor, patch: self.patch, prerelease: "beta.1"))

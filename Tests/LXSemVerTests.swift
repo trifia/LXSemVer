@@ -10,16 +10,16 @@ import XCTest
 @testable import LXSemVer
 
 // http://stackoverflow.com/a/24029847
-extension CollectionType {
+extension Collection {
     /// Return a copy of `self` with its elements shuffled
-    func shuffle() -> [Generator.Element] {
+    func shuffle() -> [Iterator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
         return list
     }
 }
 
-extension MutableCollectionType where Index == Int {
+extension MutableCollection where Index == Int {
     /// Shuffle the elements of `self` in-place.
     mutating func shuffleInPlace() {
         // empty and single-element collections don't shuffle
@@ -33,8 +33,8 @@ extension MutableCollectionType where Index == Int {
     }
 }
 
-private func hasMatch(string: String, regex: NSRegularExpression) -> Bool {
-    let numberOfMatches = regex.numberOfMatchesInString(string, options: [], range: NSMakeRange(0, string.characters.count))
+private func hasMatch(_ string: String, regex: NSRegularExpression) -> Bool {
+    let numberOfMatches = regex.numberOfMatches(in: string, options: [], range: NSMakeRange(0, string.characters.count))
     return numberOfMatches > 0
 }
 
@@ -165,7 +165,7 @@ class VersionTests: XCTestCase {
                 "2.1.0",
                 "2.1.1",
             ]
-            XCTAssertEqual(versions.shuffle().sort(<), versions)
+            XCTAssertEqual(versions.shuffle().sorted(by: <), versions)
         }
         
         XCTAssert(Version(stringLiteral: "1.0.0-alpha") < Version(stringLiteral: "1.0.0"))
@@ -189,7 +189,7 @@ class VersionTests: XCTestCase {
                 "1.0.0-rc.1",
                 "1.0.0",
             ]
-            XCTAssertEqual(versions.shuffle().sort(<), versions)
+            XCTAssertEqual(versions.shuffle().sorted(by: <), versions)
         }
     }
     
