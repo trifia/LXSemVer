@@ -19,13 +19,13 @@
 ### CocoaPods
 
 ```ruby
-pod "LXSemVer", "~> 1.0"
+pod "LXSemVer", "~> 2.0"
 ```
 
 ### Carthage
 
 ```
-github "lxcid/LXSemVer" ~> 1.0
+github "lxcid/LXSemVer" ~> 2.0
 ```
 
 ## Usage
@@ -48,6 +48,10 @@ import LXSemVer
 let version: Version = "1.0.1-alpha.1"
 print(version.next())
 ```
+
+## Compatibility
+
+`LXSemVer` 2.0 uses Swift 3.1. For projects using Swift 2.2 or older, please use `LXSemVer` 1.2.
 
 ## Concept
 
