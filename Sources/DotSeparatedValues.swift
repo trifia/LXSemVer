@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-func isValidValue(characters: String.CharacterView) -> Bool {
+func isValidValue(_ characters: String.CharacterView) -> Bool {
     if characters.isEmpty {
         return false
     }
@@ -38,7 +38,7 @@ func isValidValue(characters: String.CharacterView) -> Bool {
         }
     }
     if isNumeric && characters.count > 1 {
-        guard let firstCharacter = characters.first where firstCharacter != "0" else {
+        guard let firstCharacter = characters.first, firstCharacter != "0" else {
             return false
         }
     }
@@ -49,7 +49,7 @@ public struct DotSeparatedValues {
     public let values: [String]
     
     public init?(characters: String.CharacterView) {
-        let values = characters.split(".", maxSplit: Int.max, allowEmptySlices: true)
+        let values = characters.split(separator: ".", maxSplits: Int.max, omittingEmptySubsequences: false)
         assert(!values.isEmpty)
         for value in values {
             if !isValidValue(value) {
@@ -88,7 +88,7 @@ public func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
         }
         let lnumOpt = Int(lvalue)
         let rnumOpt = Int(rvalue)
-        if let lnum = lnumOpt, let rnum = rnumOpt where lnum < rnum {
+        if let lnum = lnumOpt, let rnum = rnumOpt, lnum < rnum {
             return true
         } else if lnumOpt == nil && rnumOpt == nil && lvalue < rvalue {
             return true
@@ -101,13 +101,13 @@ public func <(lhs: DotSeparatedValues, rhs: DotSeparatedValues) -> Bool {
     return lhs.values.count < rhs.values.count
 }
 
-extension DotSeparatedValues : ArrayLiteralConvertible {
+extension DotSeparatedValues : ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: String...) {
         self.init(values: elements)!
     }
 }
 
-extension DotSeparatedValues : StringLiteralConvertible {
+extension DotSeparatedValues : ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self.init(string: value)!
     }
@@ -123,14 +123,14 @@ extension DotSeparatedValues : StringLiteralConvertible {
 
 extension DotSeparatedValues : CustomStringConvertible {
     public var description: String {
-        return self.values.joinWithSeparator(".")
+        return self.values.joined(separator: ".")
     }
 }
 
 extension DotSeparatedValues {
     public func next() -> [DotSeparatedValues] {
         var result = [DotSeparatedValues]()
-        for (index, value) in self.values.enumerate() {
+        for (index, value) in self.values.enumerated() {
             if let num = Int(value) {
                 var valueSlice = self.values[0...index]
                 valueSlice[index] = String(num + 1)
