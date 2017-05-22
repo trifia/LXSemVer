@@ -1,5 +1,4 @@
 language: objective-c
 osx_image: xcode8.3
-xcode_project: LXSemVer.xcodeproj
-xcode_scheme: LXSemVer_OSX
-xcode_sdk: macosx
+script:
+    - xcodebuild clean build test -sdk macosx -project LXSemVer.xcodeproj -scheme LXSemVer_OSX
