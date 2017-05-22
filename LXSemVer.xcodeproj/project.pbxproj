@@ -11,8 +11,6 @@
 		AB0D1FEE1BD6E644003971A3 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0D1FE31BD6E644003971A3 /* LXSemVer.framework */; };
 		AB9C2A9D1BD8247B00729B33 /* LXSemVer.h in Headers */ = {isa = PBXBuildFile; fileRef = AB9C2A9C1BD8247B00729B33 /* LXSemVer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AB9C2AA41BD8247B00729B33 /* LXSemVer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB9C2A9A1BD8247B00729B33 /* LXSemVer.framework */; };
-		AB9C2AB51BD8268100729B33 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB31BD8268100729B33 /* Version.swift */; };
-		AB9C2AB81BD8268E00729B33 /* LXSemVerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9C2AB61BD8268E00729B33 /* LXSemVerTests.swift */; };
 		ABC09C331C246A4400EC1F07 /* DotSeparatedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC09C311C246A4400EC1F07 /* DotSeparatedValues.swift */; };
 		ABC09C341C246A4400EC1F07 /* DotSeparatedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC09C311C246A4400EC1F07 /* DotSeparatedValues.swift */; };
 		ABC09C351C246A4400EC1F07 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC09C321C246A4400EC1F07 /* Version.swift */; };
@@ -360,7 +358,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB9C2AB51BD8268100729B33 /* Version.swift in Sources */,
 				ABC09C361C246A4400EC1F07 /* Version.swift in Sources */,
 				ABC09C341C246A4400EC1F07 /* DotSeparatedValues.swift in Sources */,
 			);
@@ -370,7 +367,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB9C2AB81BD8268E00729B33 /* LXSemVerTests.swift in Sources */,
 				ABC09C3A1C246A5600EC1F07 /* LXSemVerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,6 +559,7 @@
 				PRODUCT_NAME = LXSemVer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -583,6 +580,7 @@
 				PRODUCT_NAME = LXSemVer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -596,6 +594,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lxcid.LXSemVerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -609,6 +608,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lxcid.LXSemVerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
