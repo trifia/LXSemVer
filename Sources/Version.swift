@@ -55,10 +55,10 @@ public struct Version {
         
         let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? characters.endIndex
         let versionCharacters = characters.prefix(upTo: versionEndIndex)
-        let versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).flatMap(versionComponentFromCharacters)
+        var versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).flatMap(versionComponentFromCharacters)
         
-        guard versionComponents.count == 3 else {
-            return nil
+        while versionComponents.count < 3 {
+            versionComponents.append(0)
         }
         
         var prerelease: DotSeparatedValues? = nil
