@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-func isValidValue(_ characters: String.CharacterView) -> Bool {
+func isValidValue(_ characters: Substring) -> Bool {
     if characters.isEmpty {
         return false
     }
@@ -47,9 +47,9 @@ func isValidValue(_ characters: String.CharacterView) -> Bool {
 
 public struct DotSeparatedValues {
     public let values: [String]
-    
-    public init?(characters: String.CharacterView) {
-        let values = characters.split(separator: ".", maxSplits: Int.max, omittingEmptySubsequences: false)
+
+    public init?(string: String) {
+        let values = string.split(separator: ".", maxSplits: Int.max, omittingEmptySubsequences: false)
         assert(!values.isEmpty)
         for value in values {
             if !isValidValue(value) {
@@ -58,11 +58,7 @@ public struct DotSeparatedValues {
         }
         self.init(values: values.map(String.init))
     }
-    
-    public init?(string: String) {
-        self.init(characters: string.characters)
-    }
-    
+
     public init?(values: [String]) {
         guard !values.isEmpty else {
             return nil
@@ -111,11 +107,11 @@ extension DotSeparatedValues : ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self.init(string: value)!
     }
-    
+
     public init(extendedGraphemeClusterLiteral value: String) {
         self.init(string: value)!
     }
-    
+
     public init(stringLiteral value: String) {
         self.init(string: value)!
     }
@@ -137,12 +133,12 @@ extension DotSeparatedValues {
                 result.append(DotSeparatedValues(values: Array(valueSlice))!)
                 continue
             }
-            
+
             let nextIndex = index + 1
             if nextIndex < self.values.count && Int(self.values[nextIndex]) != nil {
                 continue
             }
-            
+
             var newValues = Array(self.values[0...index])
             newValues.append("1")
             result.append(DotSeparatedValues(values: newValues)!)
