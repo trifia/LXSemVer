@@ -21,11 +21,9 @@
 // SOFTWARE.
 
 func versionComponentFromCharacters(_ characters: Substring) -> UInt? {
-    var component: UInt? = nil
+    var component: UInt?
     if characters.count > 0 {
-        if let firstCharacter = characters.first, firstCharacter != "0" || characters.count == 1 {
-            component = UInt(String(characters))
-        }
+        component = UInt(characters)
     }
 
     return component
@@ -53,10 +51,14 @@ public struct Version {
 
         let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? string.endIndex
         let versionCharacters = string.prefix(upTo: versionEndIndex)
-        var versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).compactMap(versionComponentFromCharacters)
-
-        guard versionComponents.count == 3 else {
+        guard versionCharacters.count > 0, versionCharacters.last != "." else {
+            // If a negative number is present in version components, version characters will be empty or will finish with a dot
             return nil
+        }
+
+        var versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).compactMap(versionComponentFromCharacters)
+        while versionComponents.count < 3 {
+            versionComponents.append(0)
         }
 
         var prerelease: DotSeparatedValues?

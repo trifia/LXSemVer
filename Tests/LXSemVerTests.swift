@@ -142,11 +142,24 @@ class VersionTests: XCTestCase {
         XCTAssertEqual(UInt("1")!, 1)
         
         XCTAssertNotNil(Version(string: "1.0.0"))
-        XCTAssertNil(Version(string: "01.0.0"))
+        XCTAssertNotNil(Version(string: "01.0.0"))
+        XCTAssertEqual(Version(string: "1.0.0"), Version(string: "01.0.0"))
+
         XCTAssertNotNil(Version(string: "1.5.0"))
-        XCTAssertNil(Version(string: "1.05.0"))
+        XCTAssertNotNil(Version(string: "1.05.0"))
+        XCTAssertEqual(Version(string: "1.5.0"), Version(string: "1.05.0"))
+
         XCTAssertNotNil(Version(string: "0.1.7"))
-        XCTAssertNil(Version(string: "0.1.007"))
+        XCTAssertNotNil(Version(string: "0.1.007"))
+        XCTAssertEqual(Version(string: "0.1.7"), Version(string: "0.1.007"))
+
+        XCTAssertNil(Version(string: ""))
+
+        XCTAssertNotNil(Version(string: "1.29"))
+        XCTAssertEqual(Version(string: "1.29"), Version(string: "1.29.0"))
+
+        XCTAssertNotNil(Version(string: "1"))
+        XCTAssertEqual(Version(string: "1"), Version(string: "1.0.0"))
         
         XCTAssertNotNil(Version(string: "1.1.1"))
         XCTAssertNil(Version(string: "-1.1.1"))
