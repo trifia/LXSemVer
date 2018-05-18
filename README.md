@@ -24,13 +24,13 @@
 ### CocoaPods
 
 ```ruby
-pod "LXSemVer", "~> 4.0"
+pod "LXSemVer", "~> 3.0"
 ```
 
 ### Carthage
 
 ```
-github "lxcid/LXSemVer" ~> 4.0
+github "lxcid/LXSemVer" ~> 3.0
 ```
 
 ## Usage
