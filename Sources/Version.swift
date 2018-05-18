@@ -20,17 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-func versionComponentFromCharacters(_ characters: String.CharacterView) -> UInt? {
-    let charactersCount = characters.count
-    guard charactersCount > 0 else {
-        return nil
-    }
-    if charactersCount > 1 {
-        guard let firstCharacter = characters.first, firstCharacter != "0" else {
-            return nil
+func versionComponentFromCharacters(_ characters: Substring) -> UInt? {
+    var component: UInt? = nil
+    if characters.count > 0 {
+        if let firstCharacter = characters.first, firstCharacter != "0" || characters.count == 1 {
+            component = UInt(String(characters))
         }
     }
-    return UInt(String(characters))
+
+    return component
 }
 
 public struct Version {
@@ -39,7 +37,7 @@ public struct Version {
     public let patch: UInt
     public let prerelease: DotSeparatedValues?
     public let buildMetadata: DotSeparatedValues?
-    
+
     public init(major: UInt, minor: UInt, patch: UInt, prerelease: DotSeparatedValues? = nil, buildMetadata: DotSeparatedValues? = nil) {
         self.major = major
         self.minor = minor
@@ -47,44 +45,40 @@ public struct Version {
         self.prerelease = prerelease
         self.buildMetadata = buildMetadata
     }
-    
+
     // Heavily referenced from Swift Package Manager to build a non regex version
-    public init?(characters: String.CharacterView) {
-        let prereleaseStartIndex = characters.index(of: "-")
-        let buildMetadataStartIndex = characters.index(of: "+")
-        
-        let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? characters.endIndex
-        let versionCharacters = characters.prefix(upTo: versionEndIndex)
-        let versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).flatMap(versionComponentFromCharacters)
-        
+    public init?(string: String) {
+        let prereleaseStartIndex = string.index(of: "-")
+        let buildMetadataStartIndex = string.index(of: "+")
+
+        let versionEndIndex = prereleaseStartIndex ?? buildMetadataStartIndex ?? string.endIndex
+        let versionCharacters = string.prefix(upTo: versionEndIndex)
+        var versionComponents = versionCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).compactMap(versionComponentFromCharacters)
+
         guard versionComponents.count == 3 else {
             return nil
         }
-        
-        var prerelease: DotSeparatedValues? = nil
+
+        var prerelease: DotSeparatedValues?
         if let prereleaseStartIndex = prereleaseStartIndex {
-            let prereleaseEndIndex = buildMetadataStartIndex ?? characters.endIndex
-            let prereleaseCharacters = characters[characters.index(after: prereleaseStartIndex)..<prereleaseEndIndex]
-            prerelease = DotSeparatedValues(characters: prereleaseCharacters)
+            let prereleaseEndIndex = buildMetadataStartIndex ?? string.endIndex
+            let prereleaseCharacters = string[string.index(after: prereleaseStartIndex)..<prereleaseEndIndex]
+            prerelease = DotSeparatedValues(string: String(prereleaseCharacters))
             if prerelease == nil {
                 return nil
             }
         }
-        
-        var buildMetadata: DotSeparatedValues? = nil
+
+        var buildMetadata: DotSeparatedValues?
         if let buildMetadataStartIndex = buildMetadataStartIndex {
-            let buildMetadataCharacters = characters.suffix(from: characters.index(after: buildMetadataStartIndex))
-            buildMetadata = DotSeparatedValues(characters: buildMetadataCharacters)
+            let buildMetadataCharacters = string.suffix(from: string.index(after: buildMetadataStartIndex))
+            buildMetadata = DotSeparatedValues(string: String(buildMetadataCharacters))
             if buildMetadata == nil {
                 return nil
             }
         }
-        
+
         self.init(major: versionComponents[0], minor: versionComponents[1], patch: versionComponents[2], prerelease: prerelease, buildMetadata: buildMetadata)
-    }
-    
-    public init?(string: String) {
-        self.init(characters: string.characters)
     }
 }
 
@@ -116,15 +110,27 @@ public func <(lhs: Version, rhs: Version) -> Bool {
 
 extension Version : ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
-        self.init(string: value)!
+        if let created = type(of: self).init(string: value) {
+            self = created
+        } else {
+            self = Version(major: 0, minor: 0, patch: 0)
+        }
     }
-    
+
     public init(extendedGraphemeClusterLiteral value: String) {
-        self.init(string: value)!
+        if let created = type(of: self).init(string: value) {
+            self = created
+        } else {
+            self = Version(major: 0, minor: 0, patch: 0)
+        }
     }
-    
+
     public init(stringLiteral value: String) {
-        self.init(string: value)!
+        if let created = type(of: self).init(string: value) {
+            self = created
+        } else {
+            self = Version(major: 0, minor: 0, patch: 0)
+        }
     }
 }
 
