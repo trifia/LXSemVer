@@ -30,7 +30,7 @@ pod "LXSemVer", "~> 3.0"
 ### Carthage
 
 ```
-github "lxcid/LXSemVer" ~> 3.0
+github "trifia/LXSemVer" ~> 3.0
 ```
 
 ## Usage
